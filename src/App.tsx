@@ -52,10 +52,10 @@ const MainLayout: React.FC = () => {
 
   // 3. Primary App Shell
   return (
-    <div className="min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)] transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-[var(--background)] text-[var(--foreground)] transition-colors duration-200">
       <TopBar />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-36 sm:pb-36">
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-36 md:pb-20">
         <AnimatePresence mode="wait" initial={false}>
           <motion.div
             key={activeView}

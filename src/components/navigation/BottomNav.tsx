@@ -21,11 +21,17 @@ export const BottomNav: React.FC = () => {
   return (
     <aside
       aria-label="Bottom Navigation"
-      className="fixed bottom-5 sm:bottom-6 left-0 right-0 z-40 flex justify-center px-4 pointer-events-none pb-safe"
+      className="md:hidden fixed bottom-5 left-0 right-0 z-50 flex justify-center px-4 pointer-events-none pb-safe"
     >
       <nav
         role="navigation"
-        className="pointer-events-auto w-full max-w-[340px] sm:max-w-[360px] rounded-full p-1.5 glass-dock relative select-none"
+        aria-label="Mobile Navigation Dock"
+        className="pointer-events-auto w-full max-w-[340px] rounded-full p-1.5 border glass-dock relative select-none"
+        style={{
+          backgroundColor: 'var(--glass-background)',
+          borderColor: 'var(--glass-border)',
+          boxShadow: 'var(--glass-shadow), var(--glass-highlight)',
+        }}
       >
         <div className="grid grid-cols-4 items-center relative">
           {tabs.map(tab => {
@@ -40,11 +46,15 @@ export const BottomNav: React.FC = () => {
                 aria-current={isActive ? 'page' : undefined}
                 className="relative flex flex-col items-center justify-center py-2 px-1 rounded-full transition-colors duration-200 min-h-[46px] cursor-pointer"
               >
-                {/* Smooth Animated Active Pill with Glass Depth & High Contrast */}
+                {/* Smooth Animated Active Pill with Glass Depth & Semantic Tokens */}
                 {isActive && (
                   <motion.div
                     layoutId="dock-active-indicator"
-                    className="absolute inset-0 rounded-full bg-white/90 dark:bg-white/16 shadow-xs border border-black/5 dark:border-white/20"
+                    className="absolute inset-0 rounded-full border shadow-xs"
+                    style={{
+                      backgroundColor: 'var(--dock-active-bg)',
+                      borderColor: 'var(--border-subtle)',
+                    }}
                     transition={{
                       type: 'spring',
                       stiffness: 440,
@@ -54,13 +64,13 @@ export const BottomNav: React.FC = () => {
                   />
                 )}
 
-                {/* Tab Content (Icon & Label with Crisp High Contrast) */}
+                {/* Tab Content (Icon & Label with Semantic Foreground Tokens) */}
                 <div
-                  className={`relative z-10 flex flex-col items-center justify-center transition-colors duration-200 ${
-                    isActive
-                      ? 'text-stone-950 dark:text-white font-semibold'
-                      : 'text-stone-600 hover:text-stone-950 dark:text-stone-300 dark:hover:text-white font-medium'
-                  }`}
+                  className="relative z-10 flex flex-col items-center justify-center transition-colors duration-200"
+                  style={{
+                    color: isActive ? 'var(--foreground)' : 'var(--foreground-muted)',
+                    fontWeight: isActive ? 600 : 500,
+                  }}
                 >
                   <motion.span
                     animate={{ scale: isActive ? 1.06 : 1 }}

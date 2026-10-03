@@ -20,29 +20,29 @@ export const ExploreView: React.FC = () => {
     <div className="w-full">
       {/* Page Title */}
       <div className="mb-6">
-        <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-stone-900 dark:text-[#F6F4EE]">
+        <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-[var(--foreground)]">
           Explore
         </h1>
-        <p className="mt-1 text-xs sm:text-sm text-stone-500 dark:text-stone-300">
+        <p className="mt-1 text-xs sm:text-sm text-[var(--foreground-secondary)]">
           Discover stories across all disciplines beyond your personal feed.
         </p>
       </div>
 
-      {/* Search Bar */}
+      {/* Search Bar with Semantic Input Tokens */}
       <div className="relative mb-6">
-        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-400 dark:text-stone-300" strokeWidth={1.75} />
+        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--foreground-muted)]" strokeWidth={1.75} />
         <input
           type="text"
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
           placeholder="Search by title, author, or keyword..."
-          className="w-full pl-10 pr-9 py-2.5 rounded-xl border border-stone-200 dark:border-stone-700/80 bg-stone-50/50 dark:bg-[#1E1E22] text-sm text-stone-900 dark:text-stone-100 placeholder-stone-400 dark:placeholder-stone-400 focus:outline-hidden focus:border-stone-400 dark:focus:border-stone-500 transition-colors shadow-xs"
+          className="w-full pl-10 pr-9 py-2.5 rounded-xl border border-[var(--input-border)] bg-[var(--input-bg)] text-sm text-[var(--foreground)] placeholder-[var(--input-placeholder)] focus:outline-hidden focus:border-[var(--foreground-secondary)] transition-colors shadow-xs"
         />
         {searchQuery && (
           <button
             onClick={() => setSearchQuery('')}
             aria-label="Clear search"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-700 dark:text-stone-300 dark:hover:text-white p-1 rounded cursor-pointer"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--foreground-muted)] hover:text-[var(--foreground)] p-1 rounded cursor-pointer"
           >
             <X className="w-3.5 h-3.5" strokeWidth={1.75} />
           </button>
@@ -51,7 +51,7 @@ export const ExploreView: React.FC = () => {
 
       {/* Horizontal Scrollable Category Bar with Tactile Tap */}
       <div className="mb-8 overflow-x-auto no-scrollbar pb-2">
-        <div className="flex items-center gap-1.5 min-w-max border-b border-stone-200/80 dark:border-stone-800 pb-3">
+        <div className="flex items-center gap-1.5 min-w-max border-b border-[var(--border)] pb-3">
           {categories.map(cat => {
             const isSelected = exploreCategory.toLowerCase() === cat.toLowerCase();
             return (
@@ -61,8 +61,8 @@ export const ExploreView: React.FC = () => {
                 onClick={() => setExploreCategory(cat)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors whitespace-nowrap cursor-pointer ${
                   isSelected
-                    ? 'bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 shadow-xs font-semibold'
-                    : 'text-stone-600 dark:text-stone-300 hover:text-stone-900 dark:hover:text-white hover:bg-stone-200/50 dark:hover:bg-stone-800/60'
+                    ? 'bg-[var(--foreground)] text-[var(--background)] shadow-xs font-semibold'
+                    : 'text-[var(--foreground-secondary)] hover:text-[var(--foreground)] hover:bg-[var(--surface)]'
                 }`}
               >
                 {cat}
@@ -75,10 +75,10 @@ export const ExploreView: React.FC = () => {
       {/* Stories Output */}
       {filteredExploreStories.length === 0 ? (
         <div className="py-20 text-center max-w-sm mx-auto">
-          <p className="text-sm font-medium text-stone-800 dark:text-stone-200">
+          <p className="text-sm font-medium text-[var(--foreground)]">
             No stories match "{searchQuery}" in {exploreCategory}
           </p>
-          <p className="mt-1 text-xs text-stone-500 dark:text-stone-400">
+          <p className="mt-1 text-xs text-[var(--foreground-muted)]">
             Try adjusting your search query or selecting "All" categories.
           </p>
           <button
@@ -86,7 +86,7 @@ export const ExploreView: React.FC = () => {
               setSearchQuery('');
               setExploreCategory('All');
             }}
-            className="mt-4 px-3 py-1.5 text-xs font-medium text-stone-700 dark:text-stone-200 border border-stone-300 dark:border-stone-700 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800 transition cursor-pointer"
+            className="mt-4 px-3 py-1.5 text-xs font-medium text-[var(--foreground)] border border-[var(--border)] rounded-lg hover:bg-[var(--surface)] transition cursor-pointer"
           >
             Reset Filters
           </button>

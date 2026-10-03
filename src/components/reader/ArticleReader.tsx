@@ -95,34 +95,34 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0 }}
       transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-      className="min-h-screen bg-[var(--bg-main)] text-[var(--text-primary)] transition-colors duration-200"
+      className="min-h-screen bg-[var(--background)] text-[var(--foreground)] transition-colors duration-200"
     >
       {/* 1. Subtle Reading Progress Bar (Fixed at top) */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-stone-200/50 dark:bg-stone-800">
+      <div className="fixed top-0 left-0 right-0 z-50 h-[3px] bg-[var(--border-subtle)]">
         <div
-          className="h-full bg-stone-900 dark:bg-stone-100 transition-all duration-150 ease-out"
+          className="h-full bg-[var(--foreground)] transition-all duration-150 ease-out"
           style={{ width: `${progress}%` }}
         />
       </div>
 
       {/* 2. Quiet Top Reader Header Bar */}
-      <header className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] bg-[var(--bg-main)]/95 backdrop-blur-md transition-colors">
+      <header className="sticky top-0 z-40 w-full border-b border-[var(--border-subtle)] bg-[var(--background)]/95 backdrop-blur-md transition-colors">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
           {/* Back button + Topic kicker */}
           <div className="flex items-center gap-3">
             <motion.button
               whileTap={{ scale: 0.94 }}
               onClick={closeStory}
-              className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--text-secondary)] hover:text-[var(--text-primary)] dark:text-stone-300 dark:hover:text-white p-1.5 -ml-1.5 rounded transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 text-xs font-medium text-[var(--foreground-secondary)] hover:text-[var(--foreground)] p-1.5 -ml-1.5 rounded transition-colors cursor-pointer"
               aria-label="Back to feed"
             >
               <ArrowLeft className="w-4 h-4" strokeWidth={1.75} />
               <span className="hidden sm:inline">Feed</span>
             </motion.button>
 
-            <span className="text-stone-300 dark:text-stone-500">/</span>
+            <span className="text-[var(--border)]">/</span>
 
-            <span className="text-xs uppercase tracking-wider font-semibold text-[var(--text-secondary)] dark:text-stone-200">
+            <span className="text-xs uppercase tracking-wider font-semibold text-[var(--foreground-secondary)]">
               {story.topic}
             </span>
           </div>
@@ -130,7 +130,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
           {/* Reader Actions with modern line icons & tap animation */}
           <div className="flex items-center gap-1.5 sm:gap-2">
             {/* Reading progress badge */}
-            <span className="text-[11px] font-mono text-[var(--text-muted)] dark:text-stone-300 mr-1.5 tabular-nums">
+            <span className="text-[11px] font-mono text-[var(--foreground-muted)] mr-1.5 tabular-nums">
               {progress}%
             </span>
 
@@ -140,7 +140,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
               onClick={() => setShowTypeModal(true)}
               aria-label="Typography and reader settings"
               title="Typography Settings"
-              className="px-2.5 py-1 text-xs font-semibold rounded border border-[var(--border-subtle)] hover:bg-stone-200/40 dark:hover:bg-stone-800/60 transition-colors text-[var(--text-primary)] dark:text-stone-100 cursor-pointer"
+              className="px-2.5 py-1 text-xs font-semibold rounded border border-[var(--border-subtle)] hover:bg-[var(--surface)] transition-colors text-[var(--foreground)] cursor-pointer"
             >
               Aa
             </motion.button>
@@ -151,7 +151,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
               onClick={() => toggleSaveStory(story.id)}
               aria-label={saved ? 'Remove from saved' : 'Save story'}
               title={saved ? 'Story saved' : 'Save story'}
-              className="p-1.5 rounded border border-[var(--border-subtle)] hover:bg-stone-200/40 dark:hover:bg-stone-800/60 transition-colors text-[var(--text-primary)] dark:text-stone-100 cursor-pointer"
+              className="p-1.5 rounded border border-[var(--border-subtle)] hover:bg-[var(--surface)] transition-colors text-[var(--foreground)] cursor-pointer"
             >
               <Bookmark
                 className={`w-4 h-4 transition-all duration-150 ${saved ? 'fill-current scale-105' : ''}`}
@@ -165,7 +165,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
               onClick={handleShare}
               aria-label="Copy story link"
               title="Copy link"
-              className="p-1.5 rounded border border-[var(--border-subtle)] hover:bg-stone-200/40 dark:hover:bg-stone-800/60 transition-colors text-[var(--text-primary)] dark:text-stone-100 cursor-pointer"
+              className="p-1.5 rounded border border-[var(--border-subtle)] hover:bg-[var(--surface)] transition-colors text-[var(--foreground)] cursor-pointer"
             >
               {copiedLink ? (
                 <Check className="w-4 h-4 text-emerald-500" strokeWidth={2} />
@@ -181,28 +181,28 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
       <main ref={articleContainerRef} className={`mx-auto px-4 sm:px-6 pt-10 sm:pt-16 pb-28 ${activeWidth}`}>
         {/* Article Metadata & Header */}
         <header className="mb-10 sm:mb-14">
-          <div className="flex items-center gap-2 text-xs text-[var(--text-secondary)] dark:text-stone-300 mb-4">
-            <span className="font-semibold uppercase tracking-wider text-[var(--text-primary)] dark:text-stone-100">
+          <div className="flex items-center gap-2 text-xs text-[var(--foreground-muted)] mb-4">
+            <span className="font-semibold uppercase tracking-wider text-[var(--foreground)]">
               {story.source}
             </span>
-            <span aria-hidden="true" className="text-stone-300 dark:text-stone-500">·</span>
+            <span aria-hidden="true" className="opacity-60">·</span>
             <span>{story.readTimeMinutes} min read</span>
-            <span aria-hidden="true" className="text-stone-300 dark:text-stone-500">·</span>
+            <span aria-hidden="true" className="opacity-60">·</span>
             <span>{story.publishedAt}</span>
           </div>
 
-          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-[var(--text-primary)] dark:text-[#F7F6F2] balance-text leading-[1.18] ${fontClass}`}>
+          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-medium tracking-tight text-[var(--foreground)] balance-text leading-[1.18] ${fontClass}`}>
             {story.title}
           </h1>
 
-          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-[var(--text-secondary)] dark:text-stone-300 leading-relaxed font-editorial-sans">
+          <p className="mt-4 sm:mt-6 text-base sm:text-lg text-[var(--foreground-secondary)] leading-relaxed font-editorial-sans">
             {story.subtitle}
           </p>
 
-          <div className="mt-6 pt-4 border-t border-[var(--border-subtle)] dark:border-stone-800 flex items-center justify-between text-xs text-[var(--text-muted)] dark:text-stone-300">
+          <div className="mt-6 pt-4 border-t border-[var(--border-subtle)] flex items-center justify-between text-xs text-[var(--foreground-muted)]">
             <div>
-              <span className="font-medium text-[var(--text-primary)] dark:text-stone-100">Written by {story.author}</span>
-              {story.authorRole && <span className="text-stone-500 dark:text-stone-300"> — {story.authorRole}</span>}
+              <span className="font-medium text-[var(--foreground)]">Written by {story.author}</span>
+              {story.authorRole && <span> — {story.authorRole}</span>}
             </div>
           </div>
         </header>
@@ -210,7 +210,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
         {/* Lead Hero Image if available */}
         {story.heroImage && (
           <figure className="my-8 sm:my-12">
-            <div className="overflow-hidden rounded-xl bg-stone-200/50 dark:bg-stone-900 border border-transparent dark:border-stone-800/80 shadow-xs">
+            <div className="overflow-hidden rounded-xl bg-[var(--surface-secondary)] border border-[var(--border-subtle)] shadow-xs">
               <img
                 src={story.heroImage}
                 alt={story.title}
@@ -219,7 +219,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
               />
             </div>
             {story.imageCaption && (
-              <figcaption className="mt-2.5 text-xs text-[var(--text-muted)] italic font-editorial-serif">
+              <figcaption className="mt-2.5 text-xs text-[var(--foreground-muted)] italic font-editorial-serif">
                 {story.imageCaption}
               </figcaption>
             )}
@@ -233,7 +233,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
               return (
                 <h2
                   key={idx}
-                  className={`pt-6 pb-2 font-medium tracking-tight text-[var(--text-primary)] dark:text-[#F7F6F2] ${activeSize.h2} font-serif`}
+                  className={`pt-6 pb-2 font-medium tracking-tight text-[var(--foreground)] ${activeSize.h2} font-serif`}
                 >
                   {sec.text}
                 </h2>
@@ -244,7 +244,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
               return (
                 <blockquote
                   key={idx}
-                  className="my-8 pl-5 sm:pl-6 border-l-2 border-stone-800 dark:border-stone-400 italic text-[var(--text-primary)] dark:text-[#F2EFE8]"
+                  className="my-8 pl-5 sm:pl-6 border-l-2 border-[var(--foreground)] italic text-[var(--foreground)]"
                 >
                   <p className={`${activeSize.quote} leading-relaxed`}>{sec.text}</p>
                 </blockquote>
@@ -256,7 +256,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
             return (
               <p
                 key={idx}
-                className={`text-[var(--text-primary)] dark:text-[#E2DED5] ${isFirst ? 'drop-cap' : ''}`}
+                className={`text-[var(--foreground)] ${isFirst ? 'drop-cap' : ''}`}
               >
                 {sec.text}
               </p>
@@ -266,13 +266,13 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
 
         {/* 4. Article Completion State */}
         <div className="mt-16 sm:mt-24 pt-10 border-t border-[var(--border-subtle)] text-center">
-          <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-stone-100 dark:bg-stone-800/90 text-stone-800 dark:text-stone-200 border border-stone-200 dark:border-stone-700/60 mb-3 shadow-xs">
+          <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-[var(--surface)] text-[var(--foreground)] border border-[var(--border)] mb-3 shadow-xs">
             <CheckCircle2 className="w-5 h-5 text-emerald-600 dark:text-emerald-400" strokeWidth={1.75} />
           </div>
-          <h3 className="text-lg font-serif font-medium text-[var(--text-primary)] dark:text-[#F7F6F2]">
+          <h3 className="text-lg font-serif font-medium text-[var(--foreground)]">
             You have completed this story
           </h3>
-          <p className="mt-1 text-xs text-[var(--text-secondary)] dark:text-stone-300">
+          <p className="mt-1 text-xs text-[var(--foreground-secondary)]">
             Thank you for reading deeply with Minimal.
           </p>
 
@@ -280,7 +280,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
             <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={() => toggleSaveStory(story.id)}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-md border border-[var(--border-subtle)] dark:border-stone-700 hover:bg-stone-200/40 dark:hover:bg-stone-800/60 transition-colors text-[var(--text-primary)] dark:text-stone-100 cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-medium rounded-md border border-[var(--border-subtle)] hover:bg-[var(--surface)] transition-colors text-[var(--foreground)] cursor-pointer"
             >
               <Bookmark
                 className={`w-3.5 h-3.5 ${saved ? 'fill-current' : ''}`}
@@ -292,7 +292,7 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
             <motion.button
               whileTap={{ scale: 0.96 }}
               onClick={closeStory}
-              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 hover:opacity-90 transition-opacity cursor-pointer"
+              className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-md bg-[var(--foreground)] text-[var(--background)] hover:opacity-90 transition-opacity cursor-pointer"
             >
               Return to Feed
             </motion.button>
@@ -301,8 +301,8 @@ export const ArticleReader: React.FC<Props> = ({ story }) => {
 
         {/* 5. Restrained Related Stories */}
         {relatedStories.length > 0 && (
-          <section className="mt-16 pt-10 border-t border-[var(--border-subtle)] dark:border-stone-800">
-            <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--text-muted)] dark:text-stone-300 mb-4 font-editorial-sans">
+          <section className="mt-16 pt-10 border-t border-[var(--border-subtle)]">
+            <h4 className="text-xs font-semibold uppercase tracking-widest text-[var(--foreground-muted)] mb-4 font-editorial-sans">
               Related Readings
             </h4>
             <div className="divide-y divide-[var(--border-subtle)]">

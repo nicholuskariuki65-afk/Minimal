@@ -21,20 +21,20 @@ export const PWAInstallButton: React.FC<Props> = ({ variant = 'nav' }) => {
       return (
         <button
           onClick={install}
-          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700/80 bg-stone-50/60 dark:bg-[#1E1E22] hover:bg-stone-100 dark:hover:bg-stone-800/80 transition-colors text-left shadow-xs"
+          className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-secondary)] transition-colors text-left shadow-xs cursor-pointer"
         >
           <div className="flex items-center gap-3">
-            <Download className="w-4 h-4 text-stone-700 dark:text-stone-300" strokeWidth={1.75} />
+            <Download className="w-4 h-4 text-[var(--icon)]" strokeWidth={1.75} />
             <div>
-              <div className="text-sm font-medium text-stone-900 dark:text-stone-100">
+              <div className="text-sm font-medium text-[var(--foreground)]">
                 Install Minimal App
               </div>
-              <div className="text-xs text-stone-500 dark:text-stone-300">
+              <div className="text-xs text-[var(--foreground-muted)]">
                 Install on your device for distraction-free reading
               </div>
             </div>
           </div>
-          <span className="text-xs font-medium text-stone-700 dark:text-stone-200 border border-stone-300 dark:border-stone-600 rounded-md px-2.5 py-1">
+          <span className="text-xs font-medium text-[var(--foreground)] border border-[var(--border)] rounded-md px-2.5 py-1">
             Install
           </span>
         </button>
@@ -45,9 +45,9 @@ export const PWAInstallButton: React.FC<Props> = ({ variant = 'nav' }) => {
       <button
         onClick={install}
         aria-label="Install Minimal PWA"
-        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-stone-800 dark:text-stone-200 hover:text-stone-950 dark:hover:text-white border border-stone-200 dark:border-stone-700/80 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800/80 transition-colors whitespace-nowrap"
+        className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-[var(--foreground)] border border-[var(--border)] rounded-md hover:bg-[var(--surface)] transition-colors whitespace-nowrap cursor-pointer"
       >
-        <Download className="w-3.5 h-3.5" strokeWidth={1.75} />
+        <Download className="w-3.5 h-3.5 text-[var(--icon)]" strokeWidth={1.75} />
         <span>Install App</span>
       </button>
     );
@@ -60,29 +60,29 @@ export const PWAInstallButton: React.FC<Props> = ({ variant = 'nav' }) => {
         {variant === 'settings' ? (
           <button
             onClick={() => setShowIOSGuide(true)}
-            className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-stone-700/80 bg-stone-50/60 dark:bg-[#1E1E22] hover:bg-stone-100 dark:hover:bg-stone-800/80 transition-colors text-left shadow-xs"
+            className="flex items-center justify-between w-full px-4 py-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] hover:bg-[var(--surface-secondary)] transition-colors text-left shadow-xs cursor-pointer"
           >
             <div className="flex items-center gap-3">
-              <Share2 className="w-4 h-4 text-stone-700 dark:text-stone-300" strokeWidth={1.75} />
+              <Share2 className="w-4 h-4 text-[var(--icon)]" strokeWidth={1.75} />
               <div>
-                <div className="text-sm font-medium text-stone-900 dark:text-stone-100">
+                <div className="text-sm font-medium text-[var(--foreground)]">
                   Add to Home Screen
                 </div>
-                <div className="text-xs text-stone-500 dark:text-stone-300">
+                <div className="text-xs text-[var(--foreground-muted)]">
                   Open as a standalone app on iOS Safari
                 </div>
               </div>
             </div>
-            <span className="text-xs font-medium text-stone-700 dark:text-stone-200 border border-stone-300 dark:border-stone-600 rounded-md px-2 py-1">
+            <span className="text-xs font-medium text-[var(--foreground)] border border-[var(--border)] rounded-md px-2 py-1">
               Instructions
             </span>
           </button>
         ) : (
           <button
             onClick={() => setShowIOSGuide(true)}
-            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-stone-700 dark:text-stone-200 hover:text-stone-900 dark:hover:text-white border border-stone-200 dark:border-stone-700/80 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800/80 transition-colors whitespace-nowrap"
+            className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-[var(--foreground)] border border-[var(--border)] rounded-md hover:bg-[var(--surface)] transition-colors whitespace-nowrap cursor-pointer"
           >
-            <Share2 className="w-3.5 h-3.5" strokeWidth={1.75} />
+            <Share2 className="w-3.5 h-3.5 text-[var(--icon)]" strokeWidth={1.75} />
             <span>Install on iOS</span>
           </button>
         )}
@@ -93,36 +93,36 @@ export const PWAInstallButton: React.FC<Props> = ({ variant = 'nav' }) => {
             onClick={() => setShowIOSGuide(false)}
           >
             <div
-              className="w-full max-w-sm rounded-2xl bg-[#FBF9F5] dark:bg-[#1E1E22] p-6 shadow-2xl border border-stone-200 dark:border-stone-700/80 relative"
+              className="w-full max-w-sm rounded-2xl bg-[var(--surface)] p-6 shadow-2xl border border-[var(--border)] relative"
               onClick={e => e.stopPropagation()}
             >
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="absolute top-4 right-4 text-stone-400 hover:text-stone-700 dark:text-stone-400 dark:hover:text-stone-200 p-1 rounded"
+                className="absolute top-4 right-4 text-[var(--foreground-muted)] hover:text-[var(--foreground)] p-1 rounded cursor-pointer"
                 aria-label="Close"
               >
                 <X className="w-4 h-4" strokeWidth={1.75} />
               </button>
-              <h3 className="text-base font-semibold text-stone-900 dark:text-stone-100">
+              <h3 className="text-base font-semibold text-[var(--foreground)]">
                 Install Minimal on iPhone / iPad
               </h3>
-              <p className="mt-2 text-xs leading-relaxed text-stone-600 dark:text-stone-300">
+              <p className="mt-2 text-xs leading-relaxed text-[var(--foreground-secondary)]">
                 For a distraction-free, full-screen reading experience on Safari:
               </p>
-              <ol className="mt-3 space-y-2 text-xs text-stone-700 dark:text-stone-200 list-decimal list-inside pl-1">
+              <ol className="mt-3 space-y-2 text-xs text-[var(--foreground-secondary)] list-decimal list-inside pl-1">
                 <li>
-                  Tap the <strong className="font-semibold text-stone-900 dark:text-white">Share</strong> button in Safari’s navigation bar.
+                  Tap the <strong className="font-semibold text-[var(--foreground)]">Share</strong> button in Safari’s navigation bar.
                 </li>
                 <li>
-                  Scroll down and choose <strong className="font-semibold text-stone-900 dark:text-white">Add to Home Screen</strong>.
+                  Scroll down and choose <strong className="font-semibold text-[var(--foreground)]">Add to Home Screen</strong>.
                 </li>
                 <li>
-                  Tap <strong className="font-semibold text-stone-900 dark:text-white">Add</strong> in the top-right corner.
+                  Tap <strong className="font-semibold text-[var(--foreground)]">Add</strong> in the top-right corner.
                 </li>
               </ol>
               <button
                 onClick={() => setShowIOSGuide(false)}
-                className="mt-5 w-full rounded-xl bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 py-2.5 text-xs font-semibold hover:opacity-90 transition shadow-xs"
+                className="mt-5 w-full rounded-xl bg-[var(--foreground)] text-[var(--background)] py-2.5 text-xs font-semibold hover:opacity-90 transition shadow-xs cursor-pointer"
               >
                 Done
               </button>

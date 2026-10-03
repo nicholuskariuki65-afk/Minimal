@@ -66,18 +66,18 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 14, scale: 0.98 }}
             transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
-            className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-[#FBF9F5] dark:bg-[#1E1E22] border-t sm:border border-stone-200 dark:border-stone-700/80 shadow-2xl p-5 sm:p-6 space-y-6"
+            className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-[var(--surface)] border-t sm:border border-[var(--border)] shadow-2xl p-5 sm:p-6 space-y-6"
             onClick={e => e.stopPropagation()}
           >
             {/* Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-700/80">
-              <div className="text-sm font-semibold text-stone-900 dark:text-stone-100 uppercase tracking-wider font-editorial-sans">
+            <div className="flex items-center justify-between pb-3 border-b border-[var(--border-subtle)]">
+              <div className="text-sm font-semibold text-[var(--foreground)] uppercase tracking-wider font-editorial-sans">
                 Reading Preferences
               </div>
               <motion.button
                 whileTap={{ scale: 0.9 }}
                 onClick={onClose}
-                className="text-stone-400 hover:text-stone-800 dark:text-stone-300 dark:hover:text-white p-1 rounded hover:bg-stone-200/40 dark:hover:bg-stone-800 cursor-pointer"
+                className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] p-1 rounded hover:bg-[var(--surface-secondary)] cursor-pointer"
                 aria-label="Close typography modal"
               >
                 <X className="w-4 h-4" strokeWidth={1.75} />
@@ -86,7 +86,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
             {/* 1. Theme Selection */}
             <div>
-              <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+              <label className="text-xs font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider block mb-2 font-editorial-sans">
                 Environment Theme
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -99,7 +99,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => updateReaderPreferences({ readerTheme: theme.id })}
                       className={`flex flex-col items-center justify-center py-2.5 px-1 rounded-xl border text-xs font-medium transition-all cursor-pointer ${
                         isSelected
-                          ? 'ring-2 ring-stone-900 dark:ring-stone-100 ring-offset-2 dark:ring-offset-stone-900 font-semibold'
+                          ? 'ring-2 ring-[var(--foreground)] ring-offset-2 ring-offset-[var(--surface)] font-semibold'
                           : 'hover:opacity-90'
                       }`}
                       style={{
@@ -117,7 +117,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
             {/* 2. Typeface Selection */}
             <div>
-              <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+              <label className="text-xs font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider block mb-2 font-editorial-sans">
                 Typeface
               </label>
               <div className="grid grid-cols-3 gap-2">
@@ -130,8 +130,8 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => updateReaderPreferences({ fontFamily: font.id })}
                       className={`py-2 px-3 rounded-lg border text-xs text-left transition-colors flex items-center justify-between cursor-pointer ${
                         isSelected
-                          ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-semibold shadow-xs'
-                          : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                          ? 'border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)] font-semibold shadow-xs'
+                          : 'border-[var(--border)] text-[var(--foreground)] bg-[var(--background)] hover:bg-[var(--surface-secondary)]'
                       }`}
                     >
                       <span>{font.label}</span>
@@ -144,7 +144,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
 
             {/* 3. Font Size */}
             <div>
-              <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+              <label className="text-xs font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider block mb-2 font-editorial-sans">
                 Type Size
               </label>
               <div className="grid grid-cols-4 gap-2">
@@ -157,8 +157,8 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
                       onClick={() => updateReaderPreferences({ fontSize: sz.id })}
                       className={`py-2 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
                         isSelected
-                          ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-semibold shadow-xs'
-                          : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                          ? 'border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)] font-semibold shadow-xs'
+                          : 'border-[var(--border)] text-[var(--foreground)] bg-[var(--background)] hover:bg-[var(--surface-secondary)]'
                       }`}
                     >
                       {sz.label}
@@ -171,7 +171,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
             {/* 4. Column Width & Line Spacing */}
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                <label className="text-xs font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider block mb-2 font-editorial-sans">
                   Column Width
                 </label>
                 <div className="flex flex-col gap-1.5">
@@ -184,8 +184,8 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         onClick={() => updateReaderPreferences({ readingWidth: w.id })}
                         className={`py-1.5 px-2.5 rounded-md border text-xs text-left transition-colors flex items-center justify-between cursor-pointer ${
                           isSelected
-                            ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-medium'
-                            : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                            ? 'border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)] font-medium shadow-xs'
+                            : 'border-[var(--border)] text-[var(--foreground)] bg-[var(--background)] hover:bg-[var(--surface-secondary)]'
                         }`}
                       >
                         <span>{w.label}</span>
@@ -197,7 +197,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
               </div>
 
               <div>
-                <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                <label className="text-xs font-semibold text-[var(--foreground-secondary)] uppercase tracking-wider block mb-2 font-editorial-sans">
                   Line Spacing
                 </label>
                 <div className="flex flex-col gap-1.5">
@@ -210,8 +210,8 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
                         onClick={() => updateReaderPreferences({ lineSpacing: sp.id })}
                         className={`py-1.5 px-2.5 rounded-md border text-xs text-left transition-colors flex items-center justify-between cursor-pointer ${
                           isSelected
-                            ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-medium'
-                            : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                            ? 'border-[var(--foreground)] bg-[var(--foreground)] text-[var(--background)] font-medium shadow-xs'
+                            : 'border-[var(--border)] text-[var(--foreground)] bg-[var(--background)] hover:bg-[var(--surface-secondary)]'
                         }`}
                       >
                         <span>{sp.label}</span>
@@ -228,7 +228,7 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 onClick={onClose}
-                className="w-full py-2.5 rounded-xl bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 text-xs font-semibold hover:opacity-90 transition shadow-xs cursor-pointer"
+                className="w-full py-2.5 rounded-xl bg-[var(--foreground)] text-[var(--background)] text-xs font-semibold hover:opacity-90 transition shadow-xs cursor-pointer"
               >
                 Apply & Return to Reading
               </motion.button>
