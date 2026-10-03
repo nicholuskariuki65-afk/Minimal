@@ -1,0 +1,6 @@
+{
+  "name": "Minimal",
+  "description": "A calm, distraction-free reading progressive web app.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
