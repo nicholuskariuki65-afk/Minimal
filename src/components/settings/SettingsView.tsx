@@ -29,6 +29,7 @@ export const SettingsView: React.FC = () => {
     setActiveView,
     resetOnboarding,
     savedStoryIds,
+    supabaseStatus,
   } = useApp();
 
   const [confirmReset, setConfirmReset] = useState(false);
@@ -287,7 +288,10 @@ export const SettingsView: React.FC = () => {
             </p>
             <div className="pt-2 flex items-center justify-between text-[11px] text-[var(--foreground-muted)] border-t border-[var(--border-subtle)]">
               <span>Local Storage: {savedStoryIds.length} saved stories</span>
-              <span>All rights reserved</span>
+              <span className="flex items-center gap-1.5">
+                <span className={`inline-block w-1.5 h-1.5 rounded-full ${supabaseStatus.isConnected ? 'bg-emerald-500' : 'bg-amber-400'}`} />
+                <span>{supabaseStatus.isConnected ? 'Supabase Connected' : 'Local Fallback'}</span>
+              </span>
             </div>
           </div>
 

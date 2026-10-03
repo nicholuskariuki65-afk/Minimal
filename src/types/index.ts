@@ -10,7 +10,9 @@ export type Topic =
   | 'Gaming'
   | 'Health'
   | 'Culture'
-  | 'Environment';
+  | 'Environment'
+  | 'AI'
+  | (string & {});
 
 export interface ArticleSection {
   type: 'paragraph' | 'subheading' | 'quote' | 'callout';

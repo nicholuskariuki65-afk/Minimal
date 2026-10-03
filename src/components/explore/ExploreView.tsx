@@ -12,9 +12,10 @@ export const ExploreView: React.FC = () => {
     setExploreCategory,
     searchQuery,
     setSearchQuery,
+    availableTopics,
   } = useApp();
 
-  const categories = ['All', ...ALL_TOPICS];
+  const categories = ['All', ...(availableTopics && availableTopics.length > 0 ? availableTopics : ALL_TOPICS)];
 
   return (
     <div className="w-full">

@@ -8,6 +8,8 @@ import {
   Topic,
 } from '../types';
 import { ALL_TOPICS, MOCK_STORIES } from '../data/mockStories';
+import { contentService } from '../services/contentService';
+import { isSupabaseConfigured, verifySupabaseConnection, SupabaseVerificationResult } from '../lib/supabase';
 
 interface AppContextType {
   // Navigation & View
@@ -18,24 +20,25 @@ interface AppContextType {
   openStory: (storyId: string) => void;
   closeStory: () => void;
 
-  // Onboarding & Topics
+  // Onboarding & Topics (User's followed topics remain strictly local on device)
   hasCompletedOnboarding: boolean;
   selectedTopics: Topic[];
   toggleTopic: (topic: Topic) => void;
   setSelectedTopics: (topics: Topic[]) => void;
   completeOnboarding: () => void;
   resetOnboarding: () => void;
+  availableTopics: Topic[];
 
-  // Saved Stories
+  // Saved Stories (Kept strictly local on device)
   savedStoryIds: string[];
   toggleSaveStory: (storyId: string) => void;
   isStorySaved: (storyId: string) => boolean;
 
-  // Reading Preferences
+  // Reading Preferences (Kept strictly local on device)
   readerPreferences: ReaderPreferences;
   updateReaderPreferences: (prefs: Partial<ReaderPreferences>) => void;
 
-  // App Theme
+  // App Theme (Kept strictly local on device)
   appTheme: AppTheme;
   setAppTheme: (theme: AppTheme) => void;
   isEffectiveDark: boolean;
@@ -46,15 +49,22 @@ interface AppContextType {
   searchQuery: string;
   setSearchQuery: (q: string) => void;
 
-  // Reading History & Progress
+  // Reading History & Progress (Kept strictly local on device)
   readingProgress: Record<string, ReadingProgressRecord>;
   recordProgress: (storyId: string, percent: number, isDone?: boolean) => void;
 
-  // Helper feeds
+  // Stories & Feeds
   forYouStories: Story[];
   savedStories: Story[];
   filteredExploreStories: Story[];
   allStories: Story[];
+
+  // Supabase Status
+  supabaseStatus: {
+    isConfigured: boolean;
+    isConnected: boolean;
+    message: string;
+  };
 }
 
 const AppContext = createContext<AppContextType | null>(null);
@@ -70,7 +80,7 @@ const DEFAULT_READER_PREFS: ReaderPreferences = {
 };
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Onboarding check
+  // 1. Onboarding check (Stored locally on device)
   const [hasCompletedOnboarding, setHasCompletedOnboarding] = useState<boolean>(() => {
     try {
       const stored = localStorage.getItem('minimal_onboarded');
@@ -80,7 +90,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   });
 
-  // Selected topics
+  // 2. Selected/followed topics (Stored strictly locally on device)
   const [selectedTopics, setSelectedTopicsState] = useState<Topic[]>(() => {
     try {
       const stored = localStorage.getItem('minimal_topics');
@@ -94,7 +104,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return DEFAULT_SELECTED_TOPICS;
   });
 
-  // Saved stories
+  // 3. Saved stories (Stored strictly locally on device)
   const [savedStoryIds, setSavedStoryIds] = useState<string[]>(() => {
     try {
       const stored = localStorage.getItem('minimal_saved');
@@ -105,7 +115,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return ['story-tech-compact-ai'];
   });
 
-  // Reader Preferences
+  // 4. Reader Preferences (Stored strictly locally on device)
   const [readerPreferences, setReaderPreferences] = useState<ReaderPreferences>(() => {
     try {
       const stored = localStorage.getItem('minimal_reader_prefs');
@@ -116,7 +126,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return DEFAULT_READER_PREFS;
   });
 
-  // App Theme
+  // 5. App Theme (Stored strictly locally on device)
   const [appTheme, setAppThemeState] = useState<AppTheme>(() => {
     try {
       const stored = localStorage.getItem('minimal_app_theme') as AppTheme;
@@ -127,8 +137,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     return 'system';
   });
 
-  // Active View & Navigation
-  const [activeView, setActiveViewState] = useState<ActiveView>(() => {
+  // 6. Active View & Navigation
+  const [activeView, setActiveView] = useState<ActiveView>(() => {
     return hasCompletedOnboarding ? 'for-you' : 'welcome';
   });
 
@@ -136,7 +146,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const [exploreCategory, setExploreCategory] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
-  // Reading progress
+  // 7. Reading progress & history (Stored strictly locally on device)
   const [readingProgress, setReadingProgress] = useState<Record<string, ReadingProgressRecord>>(() => {
     try {
       const stored = localStorage.getItem('minimal_reading_progress');
@@ -146,6 +156,99 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
     return {};
   });
+
+  // 8. Available Topics (from Supabase or local fallback)
+  const [availableTopics, setAvailableTopics] = useState<Topic[]>(() => {
+    try {
+      const cached = localStorage.getItem('minimal_cached_topics');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // fallback
+    }
+    return ALL_TOPICS;
+  });
+
+  // 9. All Articles/Stories (from Supabase, cached locally for offline reading)
+  const [allStories, setAllStories] = useState<Story[]>(() => {
+    try {
+      const cached = localStorage.getItem('minimal_cached_articles');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+      }
+    } catch {
+      // fallback
+    }
+    return MOCK_STORIES;
+  });
+
+  // 10. Supabase Connection Status
+  const [supabaseStatus, setSupabaseStatus] = useState<{
+    isConfigured: boolean;
+    isConnected: boolean;
+    message: string;
+  }>({
+    isConfigured: isSupabaseConfigured,
+    isConnected: false,
+    message: isSupabaseConfigured ? 'Verifying Supabase connection...' : 'Supabase credentials pending in environment.',
+  });
+
+  // Load content from Supabase on mount
+  useEffect(() => {
+    let isMounted = true;
+
+    async function loadSupabaseContent() {
+      if (isSupabaseConfigured) {
+        // First verify connection and database access
+        const verification: SupabaseVerificationResult = await verifySupabaseConnection();
+        if (isMounted) {
+          setSupabaseStatus({
+            isConfigured: true,
+            isConnected: verification.connected,
+            message: verification.message,
+          });
+        }
+
+        // Fetch topics and articles from Supabase
+        try {
+          const [topics, articles] = await Promise.all([
+            contentService.getTopics(),
+            contentService.getArticles(),
+          ]);
+
+          if (isMounted) {
+            if (topics && topics.length > 0) {
+              setAvailableTopics(topics);
+              try {
+                localStorage.setItem('minimal_cached_topics', JSON.stringify(topics));
+              } catch {
+                // Ignore storage limits
+              }
+            }
+            if (articles && articles.length > 0) {
+              setAllStories(articles);
+              try {
+                localStorage.setItem('minimal_cached_articles', JSON.stringify(articles));
+              } catch {
+                // Ignore storage limits
+              }
+            }
+          }
+        } catch (err) {
+          console.warn('Failed to load content from Supabase:', err);
+        }
+      }
+    }
+
+    loadSupabaseContent();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // System Dark Mode Detection
   const [systemIsDark, setSystemIsDark] = useState<boolean>(() => {
@@ -191,21 +294,14 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   // Actions
   const openStory = (storyId: string) => {
     setActiveStoryId(storyId);
-    setActiveViewState('reader');
+    setActiveView('reader');
     window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const closeStory = () => {
     setActiveStoryId(null);
-    setActiveViewState('for-you');
-  };
-
-  const setActiveView = (view: ActiveView) => {
-    if (view !== 'reader') {
-      setActiveStoryId(null);
-    }
-    setActiveViewState(view);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setActiveView('for-you');
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   const toggleTopic = (topic: Topic) => {
@@ -225,13 +321,13 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const completeOnboarding = () => {
     setHasCompletedOnboarding(true);
     localStorage.setItem('minimal_onboarded', 'true');
-    setActiveViewState('for-you');
+    setActiveView('for-you');
   };
 
   const resetOnboarding = () => {
-    setHasCompletedOnboarding(false);
     localStorage.removeItem('minimal_onboarded');
-    setActiveViewState('welcome');
+    setHasCompletedOnboarding(false);
+    setActiveView('welcome');
   };
 
   const toggleSaveStory = (storyId: string) => {
@@ -276,26 +372,25 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     });
   };
 
-  // Active Story
+  // Active Story (Computed from allStories)
   const activeStory = useMemo(() => {
     if (!activeStoryId) return null;
-    return MOCK_STORIES.find(s => s.id === activeStoryId) || null;
-  }, [activeStoryId]);
+    return allStories.find(s => s.id === activeStoryId) || null;
+  }, [activeStoryId, allStories]);
 
-  // Feed Computation
+  // Feed Computation (Computed dynamically from allStories & user's local topic preferences)
   const forYouStories = useMemo(() => {
-    // Return stories matching selected topics, sorted with lead story first
-    const matched = MOCK_STORIES.filter(s => selectedTopics.includes(s.topic));
-    if (matched.length === 0) return MOCK_STORIES; // fallback to show content if no topics matched
+    const matched = allStories.filter(s => selectedTopics.includes(s.topic));
+    if (matched.length === 0) return allStories; // fallback to show stories if no topics matched
     return matched;
-  }, [selectedTopics]);
+  }, [selectedTopics, allStories]);
 
   const savedStories = useMemo(() => {
-    return MOCK_STORIES.filter(s => savedStoryIds.includes(s.id));
-  }, [savedStoryIds]);
+    return allStories.filter(s => savedStoryIds.includes(s.id));
+  }, [savedStoryIds, allStories]);
 
   const filteredExploreStories = useMemo(() => {
-    return MOCK_STORIES.filter(story => {
+    return allStories.filter(story => {
       const matchesCategory =
         exploreCategory === 'All' || story.topic.toLowerCase() === exploreCategory.toLowerCase();
       const matchesSearch =
@@ -306,7 +401,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         story.topic.toLowerCase().includes(searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
     });
-  }, [exploreCategory, searchQuery]);
+  }, [exploreCategory, searchQuery, allStories]);
 
   return (
     <AppContext.Provider
@@ -323,6 +418,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         setSelectedTopics,
         completeOnboarding,
         resetOnboarding,
+        availableTopics,
         savedStoryIds,
         toggleSaveStory,
         isStorySaved,
@@ -340,7 +436,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         forYouStories,
         savedStories,
         filteredExploreStories,
-        allStories: MOCK_STORIES,
+        allStories,
+        supabaseStatus,
       }}
     >
       {children}

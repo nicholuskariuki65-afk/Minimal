@@ -12,7 +12,10 @@ export const TopicSelectionView: React.FC = () => {
     completeOnboarding,
     hasCompletedOnboarding,
     setActiveView,
+    availableTopics,
   } = useApp();
+
+  const topicsList = availableTopics && availableTopics.length > 0 ? availableTopics : ALL_TOPICS;
 
   const handleContinue = () => {
     if (!hasCompletedOnboarding) {
@@ -38,7 +41,7 @@ export const TopicSelectionView: React.FC = () => {
 
       {/* Topics Grid with Tactile Motion Feedback */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3 my-8">
-        {ALL_TOPICS.map(topic => {
+        {topicsList.map(topic => {
           const isSelected = selectedTopics.includes(topic);
           return (
             <motion.button
