@@ -1,40 +1,86 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
-import { BookOpen, Compass, Bookmark, Settings2 } from 'lucide-react';
+import { BookOpen, Compass, Bookmark, SlidersHorizontal } from 'lucide-react';
 import { ActiveView } from '../../types';
+import { motion } from 'motion/react';
 
 export const BottomNav: React.FC = () => {
   const { activeView, setActiveView } = useApp();
 
-  const tabs: Array<{ id: ActiveView; label: string; icon: React.FC<{ className?: string }> }> = [
+  const tabs: Array<{
+    id: ActiveView;
+    label: string;
+    icon: React.FC<{ className?: string; strokeWidth?: number }>;
+  }> = [
     { id: 'for-you', label: 'For You', icon: BookOpen },
     { id: 'explore', label: 'Explore', icon: Compass },
     { id: 'saved', label: 'Saved', icon: Bookmark },
-    { id: 'settings', label: 'Settings', icon: Settings2 },
+    { id: 'settings', label: 'Settings', icon: SlidersHorizontal },
   ];
 
   return (
-    <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-[#FBF9F5]/95 dark:bg-[#141416]/95 backdrop-blur-md border-t border-stone-200/80 dark:border-stone-800/80 pb-safe transition-colors">
-      <nav className="grid grid-cols-4 h-14 items-center">
-        {tabs.map(tab => {
-          const isActive = activeView === tab.id;
-          const Icon = tab.icon;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveView(tab.id)}
-              className={`flex flex-col items-center justify-center h-full min-h-[44px] transition-colors ${
-                isActive
-                  ? 'text-stone-900 dark:text-stone-100 font-semibold'
-                  : 'text-stone-400 hover:text-stone-700 dark:text-stone-500 dark:hover:text-stone-300'
-              }`}
-            >
-              <Icon className={`w-4 h-4 ${isActive ? 'stroke-[2.2]' : 'stroke-[1.7]'}`} />
-              <span className="text-[10px] tracking-tight mt-1">{tab.label}</span>
-            </button>
-          );
-        })}
+    <aside
+      aria-label="Bottom Navigation"
+      className="fixed bottom-5 sm:bottom-6 left-0 right-0 z-40 flex justify-center px-4 pointer-events-none pb-safe"
+    >
+      <nav
+        role="navigation"
+        className="pointer-events-auto w-full max-w-[340px] sm:max-w-[360px] rounded-full p-1.5 glass-dock relative select-none"
+      >
+        <div className="grid grid-cols-4 items-center relative">
+          {tabs.map(tab => {
+            const isActive = activeView === tab.id;
+            const Icon = tab.icon;
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveView(tab.id)}
+                aria-label={tab.label}
+                aria-current={isActive ? 'page' : undefined}
+                className="relative flex flex-col items-center justify-center py-2 px-1 rounded-full transition-colors duration-200 min-h-[46px] cursor-pointer"
+              >
+                {/* Smooth Animated Active Pill with Glass Depth & High Contrast */}
+                {isActive && (
+                  <motion.div
+                    layoutId="dock-active-indicator"
+                    className="absolute inset-0 rounded-full bg-white/90 dark:bg-white/16 shadow-xs border border-black/5 dark:border-white/20"
+                    transition={{
+                      type: 'spring',
+                      stiffness: 440,
+                      damping: 34,
+                      mass: 0.8,
+                    }}
+                  />
+                )}
+
+                {/* Tab Content (Icon & Label with Crisp High Contrast) */}
+                <div
+                  className={`relative z-10 flex flex-col items-center justify-center transition-colors duration-200 ${
+                    isActive
+                      ? 'text-stone-950 dark:text-white font-semibold'
+                      : 'text-stone-600 hover:text-stone-950 dark:text-stone-300 dark:hover:text-white font-medium'
+                  }`}
+                >
+                  <motion.span
+                    animate={{ scale: isActive ? 1.06 : 1 }}
+                    transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+                    className="flex items-center justify-center"
+                  >
+                    <Icon
+                      className="w-4 h-4"
+                      strokeWidth={isActive ? 2.1 : 1.75}
+                    />
+                  </motion.span>
+                  <span className="text-[10px] tracking-tight mt-1 leading-none">
+                    {tab.label}
+                  </span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </nav>
-    </div>
+    </aside>
   );
 };

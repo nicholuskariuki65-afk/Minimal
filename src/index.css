@@ -1,25 +1,86 @@
 @import "tailwindcss";
 
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-foreground-secondary: var(--foreground-secondary);
+  --color-foreground-muted: var(--foreground-muted);
+  --color-surface: var(--surface);
+  --color-surface-secondary: var(--surface-secondary);
+  --color-border-theme: var(--border);
+  --color-border-subtle: var(--border-subtle);
+  --color-icon-theme: var(--icon);
+  --color-icon-muted: var(--icon-muted);
+}
+
 @layer base {
   :root {
+    /* Primary Layout Variables */
     --bg-main: #FBF9F5;
-    --bg-surface: #F4EFEB;
-    --text-primary: #1C1917;
-    --text-secondary: #78716C;
-    --text-muted: #A8A29E;
-    --border-subtle: #E7E3DC;
+    --bg-surface: #F5EFEB;
+    --bg-surface-secondary: #EDE7E1;
+    --text-primary: #1C1917;              /* Primary title & headline text */
+    --text-secondary: #44403C;            /* Body prose, subtitles & descriptions */
+    --text-muted: #78716C;                /* Timestamps, bylines, read times, sources */
+
+    --background: #FBF9F5;
+    --foreground: #1C1917;
+    --foreground-secondary: #44403C;
+    --foreground-muted: #78716C;
+    --surface: #F5EFEB;
+    --surface-secondary: #EDE7E1;
+    --border: #E2DDD5;
+    --border-subtle: #EBE6DE;
+
+    /* Frosted Glass Surface Specifications */
+    --glass-background: rgba(251, 249, 245, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.85);
+    --glass-shadow: 0 18px 42px -6px rgba(28, 25, 23, 0.12), 0 8px 18px -3px rgba(28, 25, 23, 0.06);
+    --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.95), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.03);
+
+    --icon: #1C1917;
+    --icon-muted: #78716C;
+    --dock-active-bg: rgba(255, 255, 255, 0.9);
+    --dock-active-fg: #1C1917;
+    --input-bg: rgba(255, 255, 255, 0.75);
+    --input-border: #E2DDD5;
+    --input-placeholder: #A8A29E;
     --accent: #9A3412;
     --accent-soft: #FFEDD5;
   }
 
   .dark {
-    --bg-main: #141416;
-    --bg-surface: #1E1E22;
-    --text-primary: #EAE6DF;
-    --text-secondary: #9E988F;
-    --text-muted: #6E6860;
-    --border-subtle: #29282C;
-    --accent: #EA580C;
+    /* Primary Layout Variables in Dark Mode with High Legibility & Comfort */
+    --bg-main: #121214;
+    --bg-surface: #1B1B1F;
+    --bg-surface-secondary: #25252B;
+    --text-primary: #F5F3EF;              /* Crisp, luminous off-white headlines */
+    --text-secondary: #D6D2C8;            /* High-contrast, fatigue-free reading prose */
+    --text-muted: #A8A296;                /* Distinct, clearly legible metadata, dates & tags */
+
+    --background: #121214;
+    --foreground: #F5F3EF;
+    --foreground-secondary: #D6D2C8;
+    --foreground-muted: #A8A296;
+    --surface: #1B1B1F;
+    --surface-secondary: #25252B;
+    --border: #36353D;                  /* Clean visible boundaries */
+    --border-subtle: #28272F;           /* Hairline dividers */
+
+    /* Genuine Translucent Dark Frosted Glass */
+    --glass-background: rgba(24, 24, 28, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.16);
+    --glass-shadow: 0 24px 52px -6px rgba(0, 0, 0, 0.72), 0 10px 22px -3px rgba(0, 0, 0, 0.45);
+    --glass-highlight: inset 0 1px 1.5px 0 rgba(255, 255, 255, 0.24), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.45);
+
+    --icon: #F5F3EF;
+    --icon-muted: #A8A296;
+    --dock-active-bg: rgba(255, 255, 255, 0.16);
+    --dock-active-fg: #FFFFFF;
+    --input-bg: rgba(27, 27, 31, 0.85);
+    --input-border: #38373E;
+    --input-placeholder: #8C867D;
+    --accent: #FB923C;
     --accent-soft: #431407;
   }
 
@@ -27,28 +88,58 @@
   body[data-reader-theme="sepia"] {
     --bg-main: #F5EFEB;
     --bg-surface: #EBE2DA;
+    --bg-surface-secondary: #DFD5CB;
     --text-primary: #29221B;
-    --text-secondary: #6B5F54;
-    --text-muted: #8F8276;
-    --border-subtle: #DED3C7;
+    --text-secondary: #4A3F35;
+    --text-muted: #7A6F64;
+    --background: #F5EFEB;
+    --foreground: #29221B;
+    --foreground-secondary: #4A3F35;
+    --foreground-muted: #7A6F64;
+    --surface: #EBE2DA;
+    --surface-secondary: #DFD5CB;
+    --border: #DACFC3;
+    --border-subtle: #E2D8CC;
+    --glass-background: rgba(245, 239, 235, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.7);
   }
 
   body[data-reader-theme="charcoal"] {
-    --bg-main: #18181B;
-    --bg-surface: #222226;
-    --text-primary: #E5E1D8;
-    --text-secondary: #9A958C;
-    --text-muted: #6B665E;
-    --border-subtle: #2D2D32;
+    --bg-main: #161619;
+    --bg-surface: #202025;
+    --bg-surface-secondary: #2A2A31;
+    --text-primary: #F5F2EA;
+    --text-secondary: #D4D0C6;
+    --text-muted: #A8A296;
+    --background: #161619;
+    --foreground: #F5F2EA;
+    --foreground-secondary: #D4D0C6;
+    --foreground-muted: #A8A296;
+    --surface: #202025;
+    --surface-secondary: #2A2A31;
+    --border: #36353D;
+    --border-subtle: #28272F;
+    --glass-background: rgba(22, 22, 25, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.16);
   }
 
   body[data-reader-theme="black"] {
-    --bg-main: #0B0B0C;
-    --bg-surface: #151518;
-    --text-primary: #DEDAD3;
-    --text-secondary: #8C8780;
-    --text-muted: #57534E;
-    --border-subtle: #222226;
+    --bg-main: #0A0A0C;
+    --bg-surface: #141417;
+    --bg-surface-secondary: #1F1F24;
+    --text-primary: #F4F1EA;
+    --text-secondary: #D2CDC3;
+    --text-muted: #A39D92;
+    --background: #0A0A0C;
+    --foreground: #F4F1EA;
+    --foreground-secondary: #D2CDC3;
+    --foreground-muted: #A39D92;
+    --surface: #141417;
+    --surface-secondary: #1F1F24;
+    --border: #302F36;
+    --border-subtle: #201F25;
+    --glass-background: rgba(10, 10, 12, 0.72);
+    --glass-border: rgba(255, 255, 255, 0.16);
   }
 
   html {
@@ -62,8 +153,50 @@
     background-color: var(--bg-main);
     color: var(--text-primary);
     min-height: 100vh;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition: background-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+                color 0.22s cubic-bezier(0.16, 1, 0.3, 1);
   }
+}
+
+/* Semantic utility classes */
+.text-foreground {
+  color: var(--foreground);
+}
+
+.text-foreground-secondary {
+  color: var(--foreground-secondary);
+}
+
+.text-foreground-muted {
+  color: var(--foreground-muted);
+}
+
+.bg-background {
+  background-color: var(--background);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+.bg-surface-secondary {
+  background-color: var(--surface-secondary);
+}
+
+.border-theme {
+  border-color: var(--border);
+}
+
+.border-theme-subtle {
+  border-color: var(--border-subtle);
+}
+
+.icon-theme {
+  color: var(--icon);
+}
+
+.icon-theme-muted {
+  color: var(--icon-muted);
 }
 
 .font-editorial-serif {
@@ -78,6 +211,29 @@
   font-family: 'JetBrains Mono', monospace;
 }
 
+/* REAL Layered Frosted Glass Dock with Visible Translucency */
+.glass-dock {
+  background-color: var(--glass-background) !important;
+  backdrop-filter: blur(24px) saturate(190%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(190%) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow: var(--glass-shadow), var(--glass-highlight) !important;
+  transition:
+    background-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Tasteful fallback if backdrop-filter is not supported */
+@supports not ((-webkit-backdrop-filter: blur(10px)) or (backdrop-filter: blur(10px))) {
+  .glass-dock {
+    background-color: rgba(251, 249, 245, 0.95) !important;
+  }
+  .dark .glass-dock {
+    background-color: rgba(24, 24, 28, 0.95) !important;
+  }
+}
+
 /* Drop cap for articles */
 .drop-cap::first-letter {
   float: left;
@@ -85,7 +241,7 @@
   font-size: 3.4em;
   line-height: 0.82;
   padding-top: 0.08em;
-  padding-right: 0.12em;
+  padding-right: 0.14em;
   padding-bottom: 0.02em;
   font-weight: 500;
   color: var(--text-primary);
@@ -122,4 +278,25 @@
 
 .pt-safe {
   padding-top: env(safe-area-inset-top, 0.5rem);
+}
+
+/* Smooth micro-interactions & button feedback */
+.interactive-tap {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease;
+}
+
+.interactive-tap:active {
+  transform: scale(0.975);
+}
+
+/* Prefers-reduced-motion accessibility */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
 }

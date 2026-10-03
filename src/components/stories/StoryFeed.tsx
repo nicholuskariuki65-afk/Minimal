@@ -22,13 +22,13 @@ export const StoryFeed: React.FC<Props> = ({
   if (stories.length === 0) {
     return (
       <div className="py-20 text-center max-w-md mx-auto">
-        <p className="text-base text-stone-500 dark:text-stone-400">
+        <p className="text-base text-stone-600 dark:text-stone-300">
           No stories found for the current selection.
         </p>
         {showTopicControls && (
           <button
             onClick={() => setActiveView('topics')}
-            className="mt-4 px-4 py-2 text-xs font-medium text-stone-800 dark:text-stone-200 border border-stone-300 dark:border-stone-700 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800 transition"
+            className="mt-4 px-4 py-2 text-xs font-medium text-stone-800 dark:text-stone-100 border border-stone-300 dark:border-stone-700 rounded-md hover:bg-stone-100 dark:hover:bg-stone-800 transition"
           >
             Adjust Your Topics
           </button>
@@ -46,11 +46,11 @@ export const StoryFeed: React.FC<Props> = ({
       {/* Feed Header */}
       <div className="flex items-baseline justify-between mb-8 pb-3 border-b border-stone-200 dark:border-stone-800">
         <div>
-          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-stone-900 dark:text-stone-100">
+          <h1 className="text-3xl sm:text-4xl font-serif font-normal tracking-tight text-stone-900 dark:text-[#F6F4EE]">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-1 text-xs sm:text-sm text-stone-500 dark:text-stone-400">
+            <p className="mt-1 text-xs sm:text-sm text-stone-500 dark:text-stone-300">
               {subtitle}
             </p>
           )}
@@ -58,15 +58,15 @@ export const StoryFeed: React.FC<Props> = ({
 
         {showTopicControls && (
           <div className="flex items-center gap-2">
-            <span className="hidden md:inline text-xs text-stone-400 dark:text-stone-500">
+            <span className="hidden md:inline text-xs text-stone-400 dark:text-stone-300">
               {selectedTopics.length} topics followed
             </span>
             <button
               onClick={() => setActiveView('topics')}
-              className="inline-flex items-center gap-1.5 text-xs text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors py-1 px-2 rounded hover:bg-stone-100 dark:hover:bg-stone-800"
+              className="inline-flex items-center gap-1.5 text-xs text-stone-600 dark:text-stone-200 hover:text-stone-900 dark:hover:text-white transition-colors py-1 px-2.5 rounded hover:bg-stone-100 dark:hover:bg-stone-800/80 cursor-pointer"
               title="Edit followed topics"
             >
-              <SlidersHorizontal className="w-3.5 h-3.5" />
+              <SlidersHorizontal className="w-3.5 h-3.5" strokeWidth={1.75} />
               <span>Customize</span>
             </button>
           </div>
@@ -90,7 +90,7 @@ export const StoryFeed: React.FC<Props> = ({
       {/* Calm Footer / End of Feed */}
       <div className="pt-16 pb-8 text-center">
         <div className="inline-block w-8 h-[1px] bg-stone-300 dark:bg-stone-700 mb-4" />
-        <p className="text-xs text-stone-400 dark:text-stone-500">
+        <p className="text-xs text-stone-400 dark:text-stone-400">
           You are all caught up on your topics.
         </p>
       </div>

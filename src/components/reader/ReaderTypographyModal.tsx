@@ -8,6 +8,7 @@ import {
   ReaderTheme,
   ReaderWidth,
 } from '../../types';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface Props {
   isOpen: boolean;
@@ -16,8 +17,6 @@ interface Props {
 
 export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const { readerPreferences, updateReaderPreferences } = useApp();
-
-  if (!isOpen) return null;
 
   const fontOptions: Array<{ id: ReaderFontFamily; label: string; preview: string }> = [
     { id: 'serif', label: 'Newsreader', preview: 'Serif' },
@@ -47,177 +46,196 @@ export const ReaderTypographyModal: React.FC<Props> = ({ isOpen, onClose }) => {
   const themeOptions: Array<{ id: ReaderTheme; label: string; bg: string; text: string; border: string }> = [
     { id: 'alabaster', label: 'Paper', bg: '#FBF9F5', text: '#1C1917', border: '#E7E3DC' },
     { id: 'sepia', label: 'Sepia', bg: '#F5EFEB', text: '#29221B', border: '#DED3C7' },
-    { id: 'charcoal', label: 'Charcoal', bg: '#18181B', text: '#E5E1D8', border: '#2D2D32' },
-    { id: 'black', label: 'OLED', bg: '#0B0B0C', text: '#DEDAD3', border: '#222226' },
+    { id: 'charcoal', label: 'Charcoal', bg: '#18181B', text: '#F3EFE7', border: '#3A3A40' },
+    { id: 'black', label: 'OLED', bg: '#0B0B0C', text: '#F2EFE8', border: '#333338' },
   ];
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/35 backdrop-blur-xs p-0 sm:p-4 animate-in fade-in"
-      onClick={onClose}
-    >
-      <div
-        className="w-full max-w-md rounded-t-2xl sm:rounded-xl bg-[#FBF9F5] dark:bg-[#1C1C1F] border-t sm:border border-stone-200 dark:border-stone-800 shadow-2xl p-5 sm:p-6 space-y-6"
-        onClick={e => e.stopPropagation()}
-      >
-        {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
-          <div className="text-sm font-semibold text-stone-900 dark:text-stone-100 uppercase tracking-wider font-editorial-sans">
-            Reading Preferences
-          </div>
-          <button
-            onClick={onClose}
-            className="text-stone-400 hover:text-stone-800 dark:hover:text-stone-100 p-1"
-            aria-label="Close typography modal"
+    <AnimatePresence>
+      {isOpen && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.18 }}
+          className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/45 backdrop-blur-xs p-0 sm:p-4"
+          onClick={onClose}
+        >
+          <motion.div
+            initial={{ opacity: 0, y: 18, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 14, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="w-full max-w-md rounded-t-2xl sm:rounded-2xl bg-[#FBF9F5] dark:bg-[#1E1E22] border-t sm:border border-stone-200 dark:border-stone-700/80 shadow-2xl p-5 sm:p-6 space-y-6"
+            onClick={e => e.stopPropagation()}
           >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        {/* 1. Theme Selection */}
-        <div>
-          <label className="text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider block mb-2">
-            Environment Theme
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {themeOptions.map(theme => {
-              const isSelected = readerPreferences.readerTheme === theme.id;
-              return (
-                <button
-                  key={theme.id}
-                  onClick={() => updateReaderPreferences({ readerTheme: theme.id })}
-                  className={`flex flex-col items-center justify-center py-2.5 px-1 rounded-lg border text-xs font-medium transition-all ${
-                    isSelected
-                      ? 'ring-2 ring-stone-900 dark:ring-stone-100 ring-offset-1 dark:ring-offset-stone-950 font-semibold'
-                      : 'hover:opacity-90'
-                  }`}
-                  style={{
-                    backgroundColor: theme.bg,
-                    color: theme.text,
-                    borderColor: theme.border,
-                  }}
-                >
-                  <span className="text-[11px]">{theme.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 2. Typeface Selection */}
-        <div>
-          <label className="text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider block mb-2">
-            Typeface
-          </label>
-          <div className="grid grid-cols-3 gap-2">
-            {fontOptions.map(font => {
-              const isSelected = readerPreferences.fontFamily === font.id;
-              return (
-                <button
-                  key={font.id}
-                  onClick={() => updateReaderPreferences({ fontFamily: font.id })}
-                  className={`py-2 px-3 rounded-lg border text-xs text-left transition-colors flex items-center justify-between ${
-                    isSelected
-                      ? 'border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-semibold'
-                      : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'
-                  }`}
-                >
-                  <span>{font.label}</span>
-                  {isSelected && <Check className="w-3.5 h-3.5" />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 3. Font Size */}
-        <div>
-          <label className="text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider block mb-2">
-            Type Size
-          </label>
-          <div className="grid grid-cols-4 gap-2">
-            {sizeOptions.map(sz => {
-              const isSelected = readerPreferences.fontSize === sz.id;
-              return (
-                <button
-                  key={sz.id}
-                  onClick={() => updateReaderPreferences({ fontSize: sz.id })}
-                  className={`py-2 rounded-lg border text-xs font-medium transition-colors ${
-                    isSelected
-                      ? 'border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-semibold'
-                      : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400 hover:bg-stone-50 dark:hover:bg-stone-800/50'
-                  }`}
-                >
-                  {sz.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* 4. Column Width & Line Spacing */}
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider block mb-2">
-              Column Width
-            </label>
-            <div className="flex flex-col gap-1.5">
-              {widthOptions.map(w => {
-                const isSelected = readerPreferences.readingWidth === w.id;
-                return (
-                  <button
-                    key={w.id}
-                    onClick={() => updateReaderPreferences({ readingWidth: w.id })}
-                    className={`py-1.5 px-2.5 rounded-md border text-xs text-left transition-colors flex items-center justify-between ${
-                      isSelected
-                        ? 'border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-medium'
-                        : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400'
-                    }`}
-                  >
-                    <span>{w.label}</span>
-                    {isSelected && <Check className="w-3 h-3" />}
-                  </button>
-                );
-              })}
+            {/* Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-700/80">
+              <div className="text-sm font-semibold text-stone-900 dark:text-stone-100 uppercase tracking-wider font-editorial-sans">
+                Reading Preferences
+              </div>
+              <motion.button
+                whileTap={{ scale: 0.9 }}
+                onClick={onClose}
+                className="text-stone-400 hover:text-stone-800 dark:text-stone-300 dark:hover:text-white p-1 rounded hover:bg-stone-200/40 dark:hover:bg-stone-800 cursor-pointer"
+                aria-label="Close typography modal"
+              >
+                <X className="w-4 h-4" strokeWidth={1.75} />
+              </motion.button>
             </div>
-          </div>
 
-          <div>
-            <label className="text-xs font-medium text-stone-500 dark:text-stone-400 uppercase tracking-wider block mb-2">
-              Line Spacing
-            </label>
-            <div className="flex flex-col gap-1.5">
-              {spacingOptions.map(sp => {
-                const isSelected = readerPreferences.lineSpacing === sp.id;
-                return (
-                  <button
-                    key={sp.id}
-                    onClick={() => updateReaderPreferences({ lineSpacing: sp.id })}
-                    className={`py-1.5 px-2.5 rounded-md border text-xs text-left transition-colors flex items-center justify-between ${
-                      isSelected
-                        ? 'border-stone-900 dark:border-stone-100 bg-stone-100 dark:bg-stone-800 text-stone-900 dark:text-stone-100 font-medium'
-                        : 'border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-400'
-                    }`}
-                  >
-                    <span>{sp.label}</span>
-                    {isSelected && <Check className="w-3 h-3" />}
-                  </button>
-                );
-              })}
+            {/* 1. Theme Selection */}
+            <div>
+              <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                Environment Theme
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {themeOptions.map(theme => {
+                  const isSelected = readerPreferences.readerTheme === theme.id;
+                  return (
+                    <motion.button
+                      key={theme.id}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => updateReaderPreferences({ readerTheme: theme.id })}
+                      className={`flex flex-col items-center justify-center py-2.5 px-1 rounded-xl border text-xs font-medium transition-all cursor-pointer ${
+                        isSelected
+                          ? 'ring-2 ring-stone-900 dark:ring-stone-100 ring-offset-2 dark:ring-offset-stone-900 font-semibold'
+                          : 'hover:opacity-90'
+                      }`}
+                      style={{
+                        backgroundColor: theme.bg,
+                        color: theme.text,
+                        borderColor: theme.border,
+                      }}
+                    >
+                      <span className="text-[11px]">{theme.label}</span>
+                    </motion.button>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Done Button */}
-        <div className="pt-2">
-          <button
-            onClick={onClose}
-            className="w-full py-2.5 rounded-lg bg-stone-900 dark:bg-stone-100 text-stone-100 dark:text-stone-900 text-xs font-semibold hover:opacity-90 transition"
-          >
-            Apply & Return to Reading
-          </button>
-        </div>
-      </div>
-    </div>
+            {/* 2. Typeface Selection */}
+            <div>
+              <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                Typeface
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                {fontOptions.map(font => {
+                  const isSelected = readerPreferences.fontFamily === font.id;
+                  return (
+                    <motion.button
+                      key={font.id}
+                      whileTap={{ scale: 0.97 }}
+                      onClick={() => updateReaderPreferences({ fontFamily: font.id })}
+                      className={`py-2 px-3 rounded-lg border text-xs text-left transition-colors flex items-center justify-between cursor-pointer ${
+                        isSelected
+                          ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-semibold shadow-xs'
+                          : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      }`}
+                    >
+                      <span>{font.label}</span>
+                      {isSelected && <Check className="w-3.5 h-3.5 stroke-[2.2]" />}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3. Font Size */}
+            <div>
+              <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                Type Size
+              </label>
+              <div className="grid grid-cols-4 gap-2">
+                {sizeOptions.map(sz => {
+                  const isSelected = readerPreferences.fontSize === sz.id;
+                  return (
+                    <motion.button
+                      key={sz.id}
+                      whileTap={{ scale: 0.96 }}
+                      onClick={() => updateReaderPreferences({ fontSize: sz.id })}
+                      className={`py-2 rounded-lg border text-xs font-medium transition-colors cursor-pointer ${
+                        isSelected
+                          ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-semibold shadow-xs'
+                          : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                      }`}
+                    >
+                      {sz.label}
+                    </motion.button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 4. Column Width & Line Spacing */}
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                  Column Width
+                </label>
+                <div className="flex flex-col gap-1.5">
+                  {widthOptions.map(w => {
+                    const isSelected = readerPreferences.readingWidth === w.id;
+                    return (
+                      <motion.button
+                        key={w.id}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => updateReaderPreferences({ readingWidth: w.id })}
+                        className={`py-1.5 px-2.5 rounded-md border text-xs text-left transition-colors flex items-center justify-between cursor-pointer ${
+                          isSelected
+                            ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-medium'
+                            : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                        }`}
+                      >
+                        <span>{w.label}</span>
+                        {isSelected && <Check className="w-3 h-3 stroke-[2.2]" />}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold text-stone-600 dark:text-stone-200 uppercase tracking-wider block mb-2 font-editorial-sans">
+                  Line Spacing
+                </label>
+                <div className="flex flex-col gap-1.5">
+                  {spacingOptions.map(sp => {
+                    const isSelected = readerPreferences.lineSpacing === sp.id;
+                    return (
+                      <motion.button
+                        key={sp.id}
+                        whileTap={{ scale: 0.98 }}
+                        onClick={() => updateReaderPreferences({ lineSpacing: sp.id })}
+                        className={`py-1.5 px-2.5 rounded-md border text-xs text-left transition-colors flex items-center justify-between cursor-pointer ${
+                          isSelected
+                            ? 'border-stone-900 dark:border-stone-100 bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 font-medium'
+                            : 'border-stone-200 dark:border-stone-700/80 text-stone-700 dark:text-stone-200 bg-stone-50/50 dark:bg-stone-900/40 hover:bg-stone-100 dark:hover:bg-stone-800'
+                        }`}
+                      >
+                        <span>{sp.label}</span>
+                        {isSelected && <Check className="w-3 h-3 stroke-[2.2]" />}
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Done Button */}
+            <div className="pt-2">
+              <motion.button
+                whileTap={{ scale: 0.98 }}
+                onClick={onClose}
+                className="w-full py-2.5 rounded-xl bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 text-xs font-semibold hover:opacity-90 transition shadow-xs cursor-pointer"
+              >
+                Apply & Return to Reading
+              </motion.button>
+            </div>
+          </motion.div>
+        </motion.div>
+      )}
+    </AnimatePresence>
   );
 };

@@ -1,6 +1,7 @@
 import React from 'react';
 import { useApp } from '../../context/AppContext';
 import { ArrowRight } from 'lucide-react';
+import { motion } from 'motion/react';
 
 export const WelcomeView: React.FC = () => {
   const { setActiveView } = useApp();
@@ -11,29 +12,30 @@ export const WelcomeView: React.FC = () => {
         M
       </div>
 
-      <span className="text-xs uppercase tracking-widest text-stone-500 dark:text-stone-400 font-semibold mb-3">
+      <span className="text-xs uppercase tracking-widest text-stone-500 dark:text-stone-300 font-semibold mb-3">
         MINIMAL
       </span>
 
-      <h1 className="text-4xl sm:text-5xl font-serif font-normal tracking-tight text-stone-900 dark:text-stone-100 balance-text leading-[1.15]">
+      <h1 className="text-4xl sm:text-5xl font-serif font-normal tracking-tight text-stone-900 dark:text-[#F6F4EE] balance-text leading-[1.15]">
         A calmer way to read.
       </h1>
 
-      <p className="mt-5 text-base sm:text-lg text-stone-600 dark:text-stone-400 leading-relaxed font-editorial-sans balance-text">
+      <p className="mt-5 text-base sm:text-lg text-stone-600 dark:text-stone-300 leading-relaxed font-editorial-sans balance-text">
         Discover stories that matter to you, without the noise. No ads, no algorithmic traps, and no endless notifications.
       </p>
 
       <div className="mt-10">
-        <button
+        <motion.button
+          whileTap={{ scale: 0.96 }}
           onClick={() => setActiveView('topics')}
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-lg bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 text-sm font-semibold hover:opacity-90 transition shadow-sm"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-stone-900 text-stone-100 dark:bg-stone-100 dark:text-stone-900 text-sm font-semibold hover:opacity-90 transition shadow-sm cursor-pointer"
         >
           <span>Get started</span>
-          <ArrowRight className="w-4 h-4" />
-        </button>
+          <ArrowRight className="w-4 h-4" strokeWidth={1.75} />
+        </motion.button>
       </div>
 
-      <p className="mt-12 text-xs text-stone-400 dark:text-stone-500">
+      <p className="mt-12 text-xs text-stone-400 dark:text-stone-300">
         You choose what matters. We make it easy to read.
       </p>
     </div>

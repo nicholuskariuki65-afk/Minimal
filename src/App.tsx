@@ -15,6 +15,7 @@ import { ExploreView } from './components/explore/ExploreView';
 import { SavedView } from './components/saved/SavedView';
 import { SettingsView } from './components/settings/SettingsView';
 import { OfflineIndicator } from './components/common/OfflineIndicator';
+import { motion, AnimatePresence } from 'motion/react';
 
 const MainLayout: React.FC = () => {
   const { activeView, activeStory, forYouStories } = useApp();
@@ -22,10 +23,10 @@ const MainLayout: React.FC = () => {
   // 1. Article Reader (Full immersion mode)
   if (activeView === 'reader' && activeStory) {
     return (
-      <>
-        <ArticleReader story={activeStory} />
+      <AnimatePresence mode="wait">
+        <ArticleReader key={activeStory.id} story={activeStory} />
         <OfflineIndicator />
-      </>
+      </AnimatePresence>
     );
   }
 
@@ -54,24 +55,34 @@ const MainLayout: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-[var(--bg-main)] text-[var(--text-primary)] transition-colors duration-200">
       <TopBar />
 
-      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-24 sm:pb-16">
-        {activeView === 'for-you' && (
-          <StoryFeed
-            stories={forYouStories}
-            title="For You"
-            subtitle="Curated stories tailored to the topics you follow."
-            showTopicControls={true}
-          />
-        )}
+      <main className="flex-1 max-w-4xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-6 sm:pt-10 pb-36 sm:pb-36">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={activeView}
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -3 }}
+            transition={{ duration: 0.2, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {activeView === 'for-you' && (
+              <StoryFeed
+                stories={forYouStories}
+                title="For You"
+                subtitle="Curated stories tailored to the topics you follow."
+                showTopicControls={true}
+              />
+            )}
 
-        {activeView === 'explore' && <ExploreView />}
+            {activeView === 'explore' && <ExploreView />}
 
-        {activeView === 'saved' && <SavedView />}
+            {activeView === 'saved' && <SavedView />}
 
-        {activeView === 'settings' && <SettingsView />}
+            {activeView === 'settings' && <SettingsView />}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
-      {/* Mobile Bottom Navigation */}
+      {/* Mobile Floating Frosted-Glass Bottom Navigation Dock */}
       <BottomNav />
 
       {/* Offline Toast */}
